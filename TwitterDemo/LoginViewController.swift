@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import BDBOAuth1Manager
 
 class LoginViewController: UIViewController {
 
@@ -23,7 +22,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func onLoginButtonClicked(_ sender: AnyObject) {
-        TwitterClient.sharedInstance?.login(success: { 
+        TwitterClient.sharedInstance.login(success: { 
                 print("Logged in")
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
             }, failure: { (error) in

@@ -11,7 +11,7 @@ import BDBOAuth1Manager
 
 class TwitterClient: BDBOAuth1SessionManager {
     
-    static let sharedInstance = TwitterClient(baseURL: URL(string: "https://api.twitter.com")!, consumerKey: "Ig33ePdYSn89OTVoqjaWY6ghs", consumerSecret: "ahoq7nHPZs5ZjfLwD74onBvJCIBnOwVrRNVtmIVttOyqZK9fDG")
+    static let sharedInstance: TwitterClient = TwitterClient(baseURL: URL(string: "https://api.twitter.com")!, consumerKey: "fPVZ5FSF2ZWTijohD5cm2lJCL", consumerSecret: "HrhQfDWS5cmJ8WhvcOUjLWvhQ4X673B60qyQs7L50E0x61dcPX")
     
     var loginSuccess: (() -> ())?
     var loginFailure: ((Error) -> ())?
@@ -20,8 +20,8 @@ class TwitterClient: BDBOAuth1SessionManager {
         loginSuccess = success
         loginFailure = failure
         
-        TwitterClient.sharedInstance?.deauthorize()
-        TwitterClient.sharedInstance?.fetchRequestToken(
+        TwitterClient.sharedInstance.deauthorize()
+        TwitterClient.sharedInstance.fetchRequestToken(
             withPath: "oauth/request_token",
             method: "GET",
             callbackURL: URL(string: "twitterdemo://oauth"),
@@ -42,12 +42,12 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func handleOpenUrl(url: URL) {
         let requestToken = BDBOAuth1Credential(queryString: url.query)
-        TwitterClient.sharedInstance?.fetchAccessToken(
+        TwitterClient.sharedInstance.fetchAccessToken(
             withPath: "oauth/access_token",
             method: "POST",
             requestToken: requestToken,
             success: { (accessToken: (BDBOAuth1Credential?)) -> Void in
-                
+                TwitterClient.sharedInstance.requestSerializer.saveAccessToken(accessToken)
                 self.currentAccount(success: { (user: User) in
                         User.currentUser = user
                         self.loginSuccess?()
@@ -62,7 +62,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     func homeTimeline(success: @escaping ([Tweet]) -> (), failure: @escaping (Error) -> ()) {
-        TwitterClient.sharedInstance?.get(
+        TwitterClient.sharedInstance.get(
             "1.1/statuses/home_timeline.json",
             parameters: nil,
             progress: nil,
@@ -78,7 +78,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     func currentAccount(success: @escaping (User) -> (), failure: @escaping (Error) -> ()) {
-        TwitterClient.sharedInstance?.get(
+        TwitterClient.sharedInstance.get(
             "1.1/account/verify_credentials.json",
             parameters: nil,
             progress: nil,
@@ -95,7 +95,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func retweet(tweetId: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let parameters: [String: AnyObject] = ["id": tweetId as AnyObject]
-        TwitterClient.sharedInstance?.post(
+        TwitterClient.sharedInstance.post(
             "https://api.twitter.com/1.1/statuses/retweet/\(tweetId).json",
             parameters: parameters,
             progress: nil,
@@ -109,7 +109,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func unretweet(tweetId: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let parameters: [String: AnyObject] = ["id": tweetId as AnyObject]
-        TwitterClient.sharedInstance?.post(
+        TwitterClient.sharedInstance.post(
             "https://api.twitter.com/1.1/statuses/unretweet/\(tweetId).json",
             parameters: parameters,
             progress: nil,
@@ -123,7 +123,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func favorite(tweetId: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let parameters: [String: AnyObject] = ["id": tweetId as AnyObject]
-        TwitterClient.sharedInstance?.post(
+        TwitterClient.sharedInstance.post(
             "https://api.twitter.com/1.1/favorites/create.json",
             parameters: parameters,
             progress: nil,
@@ -137,7 +137,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func unfavorite(tweetId: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let parameters: [String: AnyObject] = ["id": tweetId as AnyObject]
-        TwitterClient.sharedInstance?.post(
+        TwitterClient.sharedInstance.post(
             "https://api.twitter.com/1.1/favorites/destroy.json",
             parameters: parameters,
             progress: nil,
@@ -151,7 +151,8 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     func logout() {
         User.currentUser = nil
-        deauthorize()
+        TwitterClient.sharedInstance.deauthorize()
+        TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
         
         NotificationCenter.default.post(name: User.userDidLogoutNotification, object: nil)
     }

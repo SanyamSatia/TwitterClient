@@ -26,7 +26,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         navigationController?.navigationBar.barTintColor = UIColor(red:0.33, green:0.67, blue:0.93, alpha:1.0)
         navigationController?.navigationBar.isTranslucent = false
 
-        TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) in
+        TwitterClient.sharedInstance.homeTimeline(success: { (tweets: [Tweet]) in
                 self.tweets = tweets
                 self.tableView.reloadData()
             }, failure: { (error: Error) in
@@ -43,7 +43,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     @IBAction func onLogoutButtonClicked(_ sender: AnyObject) {
-        TwitterClient.sharedInstance?.logout()
+        TwitterClient.sharedInstance.logout()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,14 +58,6 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         cell.tweet = tweets[indexPath.row]
         
         return cell
-    }
-
-    func reloadCellAtRow(row: Int) {
-        let indexPath = NSIndexPath(index: row)
-        
-        tableView.beginUpdates()
-        tableView.reloadRows(at: [indexPath as IndexPath], with: .automatic)
-        tableView.endUpdates()
     }
     
     /*

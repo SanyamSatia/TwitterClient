@@ -35,6 +35,7 @@
 		A47A8F301E569F4C003AB509 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A47A8F331E569F4C003AB509 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A47A8F351E569F4C003AB509 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A494C5A31E635DFF008BB73B /* TwitterDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TwitterDemo.entitlements; sourceTree = "<group>"; };
 		A4EAF0471E60E86000D1D1C2 /* TweetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +107,7 @@
 		A47A8F281E569F4C003AB509 /* TwitterDemo */ = {
 			isa = PBXGroup;
 			children = (
+				A494C5A31E635DFF008BB73B /* TwitterDemo.entitlements */,
 				A465BD011E576C9F00CF0689 /* API */,
 				A465BD001E576C9A00CF0689 /* Models */,
 				A465BCFF1E576C8C00CF0689 /* View Controllers */,
@@ -164,6 +166,11 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = NY7DR55T69;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -381,6 +388,7 @@
 			baseConfigurationReference = 0E6519C80BFEDB67EA4CBA9F /* Pods-TwitterDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TwitterDemo/TwitterDemo.entitlements;
 				DEVELOPMENT_TEAM = NY7DR55T69;
 				INFOPLIST_FILE = TwitterDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -395,6 +403,7 @@
 			baseConfigurationReference = 6C70B0DF38844353DF1BE7A7 /* Pods-TwitterDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TwitterDemo/TwitterDemo.entitlements;
 				DEVELOPMENT_TEAM = NY7DR55T69;
 				INFOPLIST_FILE = TwitterDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
