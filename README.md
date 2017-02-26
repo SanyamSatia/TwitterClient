@@ -18,7 +18,7 @@ The following **optional** features are implemented:
 
 - [ ] User can load more tweets once they reach the bottom of the feed using infinite loading similar to the actual Twitter client.
 - [x] User should be able to unretweet and unfavorite and should decrement the retweet and favorite count.
-- [ ] User can pull to refresh.
+- [x] User can pull to refresh.
 
 ## Video Walkthrough
 

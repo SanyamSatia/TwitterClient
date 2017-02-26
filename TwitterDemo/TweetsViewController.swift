@@ -25,6 +25,10 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         
         navigationController?.navigationBar.barTintColor = UIColor(red:0.33, green:0.67, blue:0.93, alpha:1.0)
         navigationController?.navigationBar.isTranslucent = false
+        
+        let refreshControl  = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
 
         TwitterClient.sharedInstance.homeTimeline(success: { (tweets: [Tweet]) in
                 self.tweets = tweets
@@ -58,6 +62,17 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         cell.tweet = tweets[indexPath.row]
         
         return cell
+    }
+    
+    func refreshControlAction(_ refreshControl: UIRefreshControl) {
+        TwitterClient.sharedInstance.homeTimeline(success: { (tweets: [Tweet]) in
+                self.tweets = tweets
+                self.tableView.reloadData()
+                refreshControl.endRefreshing()
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+                refreshControl.endRefreshing()
+        })
     }
     
     /*
