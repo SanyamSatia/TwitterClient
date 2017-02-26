@@ -15,7 +15,7 @@ class User: NSObject {
     var profileImageUrl: URL?
     var tagline: String?
     var dictionary: NSDictionary?
-    static let userDataKey = "UserData"
+    static let userDataKey = "UserDataKey"
     static let userDidLogoutNotification = NSNotification.Name(rawValue: "UserDidLogout")
     
     init(dictionary: NSDictionary) {
