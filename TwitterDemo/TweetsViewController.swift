@@ -8,15 +8,27 @@
 
 import UIKit
 
-class TweetsViewController: UIViewController {
+class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     var tweets: [Tweet]!
     
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
+        tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+        
+        navigationController?.navigationBar.barTintColor = UIColor(red:0.33, green:0.67, blue:0.93, alpha:1.0)
+        navigationController?.navigationBar.isTranslucent = false
 
         TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) in
                 self.tweets = tweets
+                self.tableView.reloadData()
             }, failure: { (error: Error) in
                 print("Error: \(error.localizedDescription)")
         })
@@ -34,7 +46,28 @@ class TweetsViewController: UIViewController {
         TwitterClient.sharedInstance?.logout()
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tweets != nil {
+            return tweets.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
+        cell.tweet = tweets[indexPath.row]
+        
+        return cell
+    }
 
+    func reloadCellAtRow(row: Int) {
+        let indexPath = NSIndexPath(index: row)
+        
+        tableView.beginUpdates()
+        tableView.reloadRows(at: [indexPath as IndexPath], with: .automatic)
+        tableView.endUpdates()
+    }
+    
     /*
     // MARK: - Navigation
 
