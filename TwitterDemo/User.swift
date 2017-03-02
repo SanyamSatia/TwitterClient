@@ -12,8 +12,12 @@ class User: NSObject {
 
     var name: String?
     var screenName: String?
+    var headerImageUrl: URL?
     var profileImageUrl: URL?
     var tagline: String?
+    var tweetCount: Int?
+    var followingCount: Int?
+    var followerCount: Int?
     var dictionary: NSDictionary?
     static let userDataKey = "UserDataKey"
     static let userDidLogoutNotification = NSNotification.Name(rawValue: "UserDidLogout")
@@ -28,7 +32,15 @@ class User: NSObject {
             profileImageUrl = URL(string: profileImageUrlString)!
         }
         
+        let headerImageUrlString = dictionary["profile_banner_url"] as? String
+        if let headerImageUrlString = headerImageUrlString {
+            headerImageUrl = URL(string: headerImageUrlString)!
+        }
+        
         tagline = dictionary["description"] as? String
+        tweetCount = dictionary["statuses_count"] as? Int
+        followingCount = dictionary["friends_count"] as? Int
+        followerCount = dictionary["followers_count"] as? Int
         
     }
     

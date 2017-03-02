@@ -8,7 +8,11 @@
 
 import UIKit
 
-class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+protocol TweetCellDelegator {
+    func performSegueFromCell(data: AnyObject?)
+}
+
+class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TweetCellDelegator {
 
     var tweets: [Tweet]!
     
@@ -22,6 +26,8 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
+        
+        // navigationItem.titleView = UIImageView(image: UIImage(named: "TwitterLogoBlue"))
         
         let refreshControl  = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
@@ -57,10 +63,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
         cell.tweet = tweets[indexPath.row]
-        
-        let profileImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(TweetsViewController.profileImageClicked(gesture:)))
-        cell.profileImageView.addGestureRecognizer(profileImageTapGesture)
-        cell.profileImageView.isUserInteractionEnabled = true
+        cell.delegate = self
         
         return cell
     }
@@ -76,26 +79,30 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         })
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "tweetDetailsSegue", sender: nil)
+    func performSegueFromCell(data: AnyObject?) {
+        performSegue(withIdentifier: "userProfileSegue", sender: data)
     }
     
-    func profileImageClicked(gesture: UIGestureRecognizer) {
-        performSegue(withIdentifier: "userProfileSegue", sender: nil)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "tweetDetailsSegue", sender: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        if let indexPath = tableView.indexPathForSelectedRow {
-            if segue.identifier == "tweetDetailsSegue" {
+        if segue.identifier == "tweetDetailsSegue" {
+            if let indexPath = tableView.indexPathForSelectedRow {
                 let viewController = segue.destination as! TweetDetailsViewController
                 viewController.tweet = self.tweets[indexPath.row]
             }
-            else if segue.identifier == "userProfileSegue" {
+        }
+        else if segue.identifier == "userProfileSegue" {
+            if let sender = sender {
                 let viewController = segue.destination as! UserProfileViewController
+                viewController.screenName = sender as! String
             }
         }
+        
     }
 
 }

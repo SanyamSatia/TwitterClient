@@ -93,6 +93,24 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
     }
     
+    func userInfo(screenName: String, success: @escaping (User) -> (), failure: @escaping (Error) -> ()) {
+        let parameters: [String: AnyObject] = ["screen_name": screenName as AnyObject]
+        TwitterClient.sharedInstance.get(
+            "1.1/users/show.json",
+            parameters: parameters,
+            progress: nil,
+            success: { (task: URLSessionDataTask?, response: Any?) -> Void in
+                let userDictionary = response as! NSDictionary
+                let user = User(dictionary: userDictionary)
+                
+                success(user)
+        },
+            failure: { (task: URLSessionDataTask?, error: Error) -> Void in
+                failure(error)
+        }
+        )
+    }
+    
     func retweet(tweetId: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let parameters: [String: AnyObject] = ["id": tweetId as AnyObject]
         TwitterClient.sharedInstance.post(

@@ -18,6 +18,7 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var favoriteCountLabel: UILabel!
     @IBOutlet weak var retweetIcon: UIImageView!
     @IBOutlet weak var favoriteIcon: UIImageView!
+    var delegate: TweetCellDelegator!
     
     var tweet: Tweet! {
         didSet {
@@ -65,12 +66,22 @@ class TweetCell: UITableViewCell {
         let favoriteTapGesture = UITapGestureRecognizer(target: self, action: #selector(TweetCell.favoriteIconClicked(gesture:)))
         favoriteIcon.addGestureRecognizer(favoriteTapGesture)
         favoriteIcon.isUserInteractionEnabled = true
+        
+        let profileImageTapGesture = UITapGestureRecognizer(target: self, action: #selector(TweetCell.profileImageClicked(gesture:)))
+        profileImageView.addGestureRecognizer(profileImageTapGesture)
+        profileImageView.isUserInteractionEnabled = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func profileImageClicked(gesture: UIGestureRecognizer) {
+        if delegate != nil {
+            delegate.performSegueFromCell(data: tweet.handle as AnyObject?)
+        }
     }
     
     func retweetIconClicked(gesture: UIGestureRecognizer) {
