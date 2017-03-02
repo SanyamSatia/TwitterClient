@@ -160,7 +160,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="keb-eS-Ttc">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="0ME-V2-VXW">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="tintColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="onLogoutButtonClicked:" destination="FEv-8b-L6a" id="3JC-pg-56d"/>
                             </connections>
@@ -193,18 +193,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="What's happening?" translatesAutoresizingMaskIntoConstraints="NO" id="pJL-yh-TxL">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pJL-yh-TxL">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bw1-xJ-tKg">
-                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <items/>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -513,6 +508,7 @@
                         <outlet property="timestampLabel" destination="K3j-Q2-Hbo" id="UI2-19-beL"/>
                         <outlet property="tweetLabel" destination="NDX-LY-ObW" id="CgJ-x7-lNc"/>
                         <outlet property="usernameLabel" destination="Al9-6s-gG1" id="afn-ef-Pal"/>
+                        <segue destination="yCO-GI-E76" kind="push" identifier="replyTweetSegue" id="Dbl-Kw-kK5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3h6-uM-QNs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -544,4 +540,7 @@
         <image name="reply-icon" width="30" height="30"/>
         <image name="retweet-icon" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Dbl-Kw-kK5"/>
+    </inferredMetricsTieBreakers>
 </document>

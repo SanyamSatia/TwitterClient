@@ -88,8 +88,6 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        
         if segue.identifier == "tweetDetailsSegue" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let viewController = segue.destination as! TweetDetailsViewController

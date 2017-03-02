@@ -125,6 +125,25 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
     }
     
+    func statusUpdate(status: String, replyStatusId: Int?, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        var parameters: [String: AnyObject] = ["status": status as AnyObject]
+        
+        if let replyStatusId = replyStatusId {
+            parameters["in_reply_to_status_id"] = replyStatusId as AnyObject?
+        }
+        
+        TwitterClient.sharedInstance.post(
+            "https://api.twitter.com/1.1/statuses/update.json",
+            parameters: parameters,
+            progress: nil,
+            success: { (task: URLSessionDataTask?, response: Any?) -> Void in
+                success()
+        },
+            failure: { (task: URLSessionDataTask?, error: Error) -> Void in
+                failure(error)
+        })
+    }
+    
     func unretweet(tweetId: Int, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let parameters: [String: AnyObject] = ["id": tweetId as AnyObject]
         TwitterClient.sharedInstance.post(
