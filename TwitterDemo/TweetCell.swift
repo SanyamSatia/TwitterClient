@@ -27,7 +27,7 @@ class TweetCell: UITableViewCell {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMM dd"
             let dateString = dateFormatter.string(from: tweet.timeStamp!)
-            handleTimeLabel.text = tweet.handle! + " · " + dateString
+            handleTimeLabel.text = "@" + tweet.handle! + " · " + dateString
             
             if tweet.profileImageUrl != nil {
                 profileImageView.setImageWith(tweet.profileImageUrl!)
