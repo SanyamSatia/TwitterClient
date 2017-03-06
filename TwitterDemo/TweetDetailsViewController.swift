@@ -58,17 +58,65 @@ class TweetDetailsViewController: UIViewController {
         replyIcon.addGestureRecognizer(replyTapGesture)
         replyIcon.isUserInteractionEnabled = true
         
-        let retweetTapGesture = UITapGestureRecognizer(target: self, action: #selector(TweetCell.retweetIconClicked(gesture:)))
+        let retweetTapGesture = UITapGestureRecognizer(target: self, action: #selector(TweetDetailsViewController.retweetIconClicked(gesture:)))
         retweetIcon.addGestureRecognizer(retweetTapGesture)
         retweetIcon.isUserInteractionEnabled = true
         
-        let favoriteTapGesture = UITapGestureRecognizer(target: self, action: #selector(TweetCell.favoriteIconClicked(gesture:)))
+        let favoriteTapGesture = UITapGestureRecognizer(target: self, action: #selector(TweetDetailsViewController.favoriteIconClicked(gesture:)))
         favoriteIcon.addGestureRecognizer(favoriteTapGesture)
         favoriteIcon.isUserInteractionEnabled = true
     }
     
     func replyIconClicked(gesture: UIGestureRecognizer) {
         performSegue(withIdentifier: "replyTweetSegue", sender: nil)
+    }
+    
+    func retweetIconClicked(gesture: UIGestureRecognizer) {
+        if tweet.retweeted! {
+            TwitterClient.sharedInstance.unretweet(tweetId: tweet.id!, success: {
+                print("unretweeted")
+                self.tweet.retweeted = false
+                self.tweet.retweetCount = self.tweet.retweetCount! - 1
+                self.retweetIcon.image = UIImage(named: "retweet-icon")
+                self.updateRetweetCount()
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+            })
+        } else {
+            TwitterClient.sharedInstance.retweet(tweetId: tweet.id!, success: {
+                print("retweeted")
+                self.tweet.retweeted = true
+                self.tweet.retweetCount = self.tweet.retweetCount! + 1
+                self.retweetIcon.image = UIImage(named: "retweet-icon-green")
+                self.updateRetweetCount()
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+            })
+        }
+    }
+    
+    func favoriteIconClicked(gesture: UIGestureRecognizer) {
+        if tweet.favorited! {
+            TwitterClient.sharedInstance.unfavorite(tweetId: tweet.id!, success: {
+                print("unfavorited")
+                self.tweet.favorited = false
+                self.tweet.favoriteCount = self.tweet.favoriteCount! - 1
+                self.favoriteIcon.image = UIImage(named: "favor-icon")
+                self.updateFavoriteCount()
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+            })
+        } else {
+            TwitterClient.sharedInstance.favorite(tweetId: tweet.id!, success: {
+                print("favorited")
+                self.tweet.favorited = true
+                self.tweet.favoriteCount = self.tweet.favoriteCount! + 1
+                self.favoriteIcon.image = UIImage(named: "favor-icon-red")
+                self.updateFavoriteCount()
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+            })
+        }
     }
     
     func updateRetweetCount() {
